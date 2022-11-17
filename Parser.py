@@ -1,21 +1,26 @@
 import os
+import random
 
 
+motsClefsVariables = {'int','float','double', 'Vector2','Texture2D'}
+variables = {}
+weAreInIf = False
 
-motsClefs = {}
-variableInt = {}
-variableString = {}
-variableFloat = {}
-variableBool = {}
-
-def findDecInt(mots):
+def findNewVariable(mots):
     for mot in mots:
-        if mot =='int':
-            if mots[mots.index('int')+2] == '=':
-                variableInt[mots[mots.index('int')+1]] = mots[mots.index('int') + 3]
+        if mot in motsClefsVariables:
+            if mots[mots.index(mot)+2] == '=' and mots[mots.index(mot)+3] != 'new':
+                variables[mots[mots.index(mot)+1]] = mots[mots.index(mot) + 3]
+            elif mots[mots.index(mot)+2] == '=' and mots[mots.index(mot)+3] == 'new':
+                variables[mots[mots.index(mot)+1]] = random.randrange(100)
             else:
-                variableInt[mots[mots.index('int')+1]] = 0
+                variables[mots[mots.index(mot)+1]] = 0
 
+def supprCommentary(mots):
+    for mot in mots:
+        if mot == '//':
+            del mots[mots.index('//'):]
+    return mots
 
 f = open("code#.cs", "r")
 chaine = f.read()
@@ -23,10 +28,9 @@ chaine = f.read()
 lignes = chaine.split('\n')
 for ligne in lignes:
     mots = ligne.split(' ')
-
+    supprCommentary(mots)
     mots = list(filter(None, mots))
-    for mot in mots:
-        if mot == '//':
-            del mots[mots.index('//'):]
-        findDecInt(mots)
-print(variableInt)
+    findNewVariable(mots)
+
+
+print(variables)

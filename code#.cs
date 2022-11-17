@@ -2,7 +2,7 @@ using System.Collections ;
 using System.Collections.Generic ;
 using UnityEngine ;
 int a = 9 ;
-int b ;
+int b ; // int c = 3
 public class SetCursor : MonoBehaviour
 {
     public Texture2D eyecrossair ;
@@ -63,4 +63,4 @@ public class SetCursor : MonoBehaviour
             Cursor.SetCursor ( directiondown , cursorOffset5 , CursorMode.Auto ) ;
         }
     }
-} // test uwu
+} // test
