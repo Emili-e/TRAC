@@ -46,31 +46,36 @@ def t_error(t):
     print(f'Illegal character {t.value[0]!r}')
     t.lexer.skip(1)
 
+
+
 # Build the lexer object
-lexer = lex.lex()
+# lexer = lex.lex()
 
 # Data to test
-f = open("code#.cs", "r")
-data = f.read()
+# f = open("code#.cs", "r")
+# data = f.read()
 
 # Give the lexer some input
-lexer.input(data)
+# lexer.input(data)
 
 # Tokenize
-lexing = []
-while True:
-    tok = lexer.token()
-    lexing = lexing + [tok]
-    if not tok: break # No more input
-    # print(tok)
+def lexing(data):
+    lexer = lex.lex()
+    lexer.input(data)
+    
 
-lexing.pop() # retire le dernier élément None
-print(lexing)
+    lexing = []
+    while True:
+        tok = lexer.token()
+        lexing = lexing + [tok]
+        if not tok: break # No more input
+    # print(tok)
+    lexing.pop()
+    # retire le dernier élément None
+    #print(lexing)
+    return lexing
 
 # lexing : liste dont les éléments sont : LexToken(TYPE,'value',line,col)
 # - lexing[index].type --> type du token (nom du token)
 # - lexing[index].value --> valeur du token
 # - lexing[index].lineno --> le numero de ligne courant
-
-
-
