@@ -16,21 +16,5 @@ def findNewVariable(mots):
             else:
                 variables[mots[mots.index(mot)+1]] = 0
 
-def supprCommentary(mots):
-    for mot in mots:
-        if mot == '//':
-            del mots[mots.index('//'):]
-    return mots
-
-f = open("code#.cs", "r")
-chaine = f.read()
-
-lignes = chaine.split('\n')
-for ligne in lignes:
-    mots = ligne.split(' ')
-    supprCommentary(mots)
-    mots = list(filter(None, mots))
-    findNewVariable(mots)
-
 
 print(variables)
