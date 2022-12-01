@@ -1,5 +1,5 @@
 from ply import lex
-
+import Parser
 # --- Tokenizer
 
 # All tokens must be named in advance.
@@ -69,10 +69,11 @@ def lexing(data):
         tok = lexer.token()
         lexing = lexing + [tok]
         if not tok: break # No more input
-    # print(tok)
     lexing.pop()
-    # retire le dernier élément None
     #print(lexing)
+    # retire le dernier élément None
+    Parser.variableIdentifier(lexing)
+    print(Parser.variables)
     return lexing
 
 # lexing : liste dont les éléments sont : LexToken(TYPE,'value',line,col)
