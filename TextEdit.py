@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QApplication,QWidget,QTextEdit, QVBoxLayout
 #from PyQt5.QtGui import QGuiApplication
 import sys
-import lexer
+import socket
 
 class TextEditDemo(QWidget):
         def __init__(self,parent=None):
@@ -10,7 +10,7 @@ class TextEditDemo(QWidget):
 
                 self.setWindowTitle("QTextEdit")
                 self.resize(260,260)
-
+                self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
                 self.textEdit = QTextEdit()
 
                 layout = QVBoxLayout()
@@ -18,6 +18,7 @@ class TextEditDemo(QWidget):
                 self.setLayout(layout)
                 
                 self.textEdit.textChanged.connect(self.recupText)
+                print(self.recupText)
         
         """Pas utile du tout, je le garde au cas où"""
         def btnPress1_Clicked(self):
@@ -28,7 +29,7 @@ class TextEditDemo(QWidget):
         def recupText(self):
                 myText = self.textEdit.toPlainText()
                 #print(myText) # on peut le faire passer dans un parseur, c'est nice
-                lexer.lexing(myText)
+                self.sock.sendto(myText.encode(), ("127.0.0.1", 1234))
                 
                 
        
@@ -37,7 +38,7 @@ if __name__ == '__main__':
         app = QApplication(sys.argv)
         win = TextEditDemo()
         win.show()
-        
+        # Récupération du contenu de l'éditeur
         sys.exit(app.exec_())
         """
         app = QGuiApplication(argc, argv)

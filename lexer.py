@@ -59,7 +59,7 @@ def t_error(t):
 # lexer.input(data)
 
 # Tokenize
-def lexing(data):
+def lexing(data, socket):
     lexer = lex.lex()
     lexer.input(data)
     
@@ -72,8 +72,7 @@ def lexing(data):
     lexing.pop()
     #print(lexing)
     # retire le dernier élément None
-    Parser.variableIdentifier(lexing)
-    print(Parser.variables)
+    print(Parser.variableIdentifier(lexing, socket))
     return lexing
 
 # lexing : liste dont les éléments sont : LexToken(TYPE,'value',line,col)

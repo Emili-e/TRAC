@@ -12,7 +12,6 @@ data = f.read()
 
 # Variables
 typekeywords = {'int','string', 'bool'}
-variables = {'int' : [], 'string' : [], 'bool' : []}
 intUninitialized = -1
 stringUninitialized = ""
 boolUninitialized = False
@@ -30,86 +29,91 @@ thickness = [k for k in range(5)]
 # Function
 
 # Add variables in dict:variables
-def variableIdentifier(lexing):
+def variableIdentifier(lexing, socket):
+    variables = {'int' : [], 'string' : [], 'bool' : []}
     for i in range (len(lexing)):
         if ((lexing[i].type == "NAME") & (lexing[i].value in typekeywords)):
             if (lexing[i].value == "int"):
-                addInVariables(lexing, i, "int", variables)
+                addInVariables(lexing, i, "int", variables, socket)
             if (lexing[i].value == "string"):
-                addInVariables(lexing, i, "string", variables)
+                addInVariables(lexing, i, "string", variables, socket)
             if (lexing[i].value == "bool"):
-                addInVariables(lexing, i, "bool", variables)
+                addInVariables(lexing, i, "bool", variables, socket)
+
+    return variables
 
 
 # Add variables in dict:variables following the type
-def addInVariables(lexing, i, type, variables):
+def addInVariables(lexing, i, type, variables, socket):
     if (len(lexing) > i+4 and type == 'int'):
         # int   a   =   3   ;
         if ((lexing[i+2].type == "ASSIGN") and (lexing[i+4].type == "SCOL")):
-            setNoDouble("int", lexing[i+1].value, lexing[i+3].value)
+            setNoDouble("int", lexing[i+1].value, lexing[i+3].value, variables, socket)
             #variables["int"].append([lexing[i+1].value, lexing[i+3].value])
         # int   a   ;
         if (lexing[i+2].type == "SCOL"):
-            setNoDouble("int",lexing[i+1].value, intUninitialized )
+            setNoDouble("int",lexing[i+1].value, intUninitialized, variables, socket )
             #variables["int"].append([lexing[i+1].value, intUninitialized])
         # int   a   ,   b   ;
         else : 
             j = i+2
             while(lexing[j].type == "COM"):
-                setNoDouble("int",lexing[j-1].value, intUninitialized )
+                setNoDouble("int",lexing[j-1].value, intUninitialized, variables, socket )
                 #variables["int"].append([lexing[j-1].value, intUninitialized])
                 j = j + 2
             if (lexing[j].type == "SCOL"):
-                setNoDouble("int",lexing[j-1].value, intUninitialized )
+                setNoDouble("int",lexing[j-1].value, intUninitialized, variables, socket )
                 #variables["int"].append([lexing[j-1].value, intUninitialized])
 
     if (type == 'string'):
         if ((len(lexing) > i+5)  and (lexing[i+2].type == "ASSIGN") and (lexing[i+3].type == "QUOT") and (lexing[i+5].type == "QUOT")):
-            setNoDouble("string",lexing[i+1].value, lexing[i+4].value )
+            setNoDouble("string",lexing[i+1].value, lexing[i+4].value, variables, socket )
             #variables["string"].append([lexing[i+1].value, lexing[i+4].value])
         if ((len(lexing) > i+2) & (lexing[i+2].type == "SCOL")):
-            setNoDouble("string",lexing[i+1].value, stringUninitialized )
+            setNoDouble("string",lexing[i+1].value, stringUninitialized, variables, socket )
             #variables["string"].append([lexing[i+1].value, stringUninitialized])
         else : 
             j = i+2
             while((len(lexing) > j ) and lexing[j].type == "COM"):
-                setNoDouble("string",lexing[j-1].value, stringUninitialized )
+                setNoDouble("string",lexing[j-1].value, stringUninitialized , variables, socket )
                 #variables["string"].append([lexing[j-1].value, stringUninitialized])
                 j = j + 2
             if ((len(lexing) > j) and lexing[j].type == "SCOL"):
-                setNoDouble("string",lexing[j-1].value, stringUninitialized )
+                setNoDouble("string",lexing[j-1].value, stringUninitialized, variables, socket )
                 #variables["string"].append([lexing[j-1].value, stringUninitialized])
 
     if (type == 'bool'):
         if ((len(lexing) > i+4) and (lexing[i+2].type == "ASSIGN") and (lexing[i+4].type == "SCOL")):
-            setNoDouble("bool",lexing[i+1].value, lexing[i+3].value)
+            setNoDouble("bool",lexing[i+1].value, lexing[i+3].value, variables, socket)
             #variables["bool"].append([lexing[i+1].value, lexing[i+3].value])
         if ((len(lexing) > i+2) and lexing[i+2].type == "SCOL"):
-            setNoDouble("bool",lexing[i+1].value, boolUninitialized)
+            setNoDouble("bool",lexing[i+1].value, boolUninitialized, variables, socket)
             #variables["bool"].append([lexing[i+1].value, boolUninitialized])
         else : 
             j = i+2
             while((len(lexing) > j) and lexing[j].type == "COM"):
-                setNoDouble("bool",lexing[j-1].value, boolUninitialized)
+                setNoDouble("bool",lexing[j-1].value, boolUninitialized, variables, socket)
                 #variables["bool"].append([lexing[j-1].value, boolUninitialized])
                 j = j + 2
             if ((len(lexing) > j) and lexing[j].type == "SCOL"):
-                setNoDouble("bool",lexing[j-1].value, boolUninitialized)
+                setNoDouble("bool",lexing[j-1].value, boolUninitialized, variables, socket)
                 #variables["bool"].append([lexing[j-1].value, boolUninitialized])
 
 
-def setNoDouble(type, nomVar, value) :
+def setNoDouble(type, nomVar, value, variables, socket) :
     for list in variables[type] :
         #si déjà dans la liste
         if list[0] == nomVar :
             #si mauvaise valeur dans la liste
             if list[1] != value :
-                variables[type][list][1] = value
+                list[1] = value
+                socket.sendto(str(value).encode(), ("127.0.0.1", 1111))
             #si bonne valeur, on fait rien
             return
     #pas dans la liste
     else : 
         variables[type].append([nomVar, value])
+        socket.sendto(str(value).encode(), ("127.0.0.1", 1111))
         
         
 
