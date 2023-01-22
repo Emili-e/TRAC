@@ -9,7 +9,7 @@ class TextEditDemo(QWidget):
                 super().__init__(parent)
 
                 self.setWindowTitle("QTextEdit")
-                self.setStyleSheet("color : white ;background: rgba(0,0,0,100%)")
+                self.setStyleSheet("color : white ; background: rgba(0,0,0,0%)")
                 self.resize(260,260)
                 self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
                 self.textEdit = QTextEdit()
@@ -19,7 +19,7 @@ class TextEditDemo(QWidget):
                 self.setLayout(layout)
                 
                 self.textEdit.textChanged.connect(self.recupText)
-                print(self.recupText)
+                #print(self.recupText)
         
         """Pas utile du tout, je le garde au cas où"""
         def btnPress1_Clicked(self):

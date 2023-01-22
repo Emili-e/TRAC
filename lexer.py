@@ -6,7 +6,7 @@ import Parser
 tokens = ( 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 
            'LPAREN', 'RPAREN', 'LBRACE', 'RBRACE',
            'COL', 'SCOL', 'COM', 'ASSIGN',
-           'NAME', 'NUMBER' )
+           'NAME', 'NUMBER', 'NORMSTRING' )
 
 # Ignored characters
 t_ignore = ' \t'
@@ -31,10 +31,12 @@ t_NAME = r'[a-zA-Z_][a-zA-Z0-9._]*'
 
 # A function can be used if there is an associated action.
 # Write the matching regex in the docstring.
+
 def t_NUMBER(t):
     r'\d+'
     t.value = int(t.value)
     return t
+
 
 # Ignored token with an action associated with it
 def t_ignore_newline(t):

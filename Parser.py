@@ -45,17 +45,17 @@ def variableIdentifier(lexing, socket):
 
 # Add variables in dict:variables following the type
 def addInVariables(lexing, i, type, variables, socket):
-    if (len(lexing) > i+4 and type == 'int'):
+    if (type == 'int'):
         # int   a   =   3   ;
-        if ((lexing[i+2].type == "ASSIGN") and (lexing[i+4].type == "SCOL")):
+        if (len(lexing) > i+4 and (lexing[i+2].type == "ASSIGN") and (lexing[i+4].type == "SCOL")):
             setNoDouble("int", lexing[i+1].value, lexing[i+3].value, variables, socket)
             #variables["int"].append([lexing[i+1].value, lexing[i+3].value])
         # int   a   ;
-        if (lexing[i+2].type == "SCOL"):
+        if (len(lexing) > i+2 and lexing[i+2].type == "SCOL"):
             setNoDouble("int",lexing[i+1].value, intUninitialized, variables, socket )
             #variables["int"].append([lexing[i+1].value, intUninitialized])
         # int   a   ,   b   ;
-        else : 
+        elif len(lexing) > i+2 : 
             j = i+2
             while(lexing[j].type == "COM"):
                 setNoDouble("int",lexing[j-1].value, intUninitialized, variables, socket )
@@ -66,14 +66,14 @@ def addInVariables(lexing, i, type, variables, socket):
                 #variables["int"].append([lexing[j-1].value, intUninitialized])
 
     if (type == 'string'):
-        if ((len(lexing) > i+5)  and (lexing[i+2].type == "ASSIGN") and (lexing[i+3].type == "QUOT") and (lexing[i+5].type == "QUOT")):
-            setNoDouble("string",lexing[i+1].value, lexing[i+4].value, variables, socket )
+        if ((len(lexing) > i+4)  and (lexing[i+2].type == "ASSIGN") and (lexing[i+4].type == "SCOL")): #and (lexing[i+3].type == "NAME") 
+            setNoDouble("string",lexing[i+1].value, lexing[i+3].value, variables, socket )
             #variables["string"].append([lexing[i+1].value, lexing[i+4].value])
-        if ((len(lexing) > i+2) & (lexing[i+2].type == "SCOL")):
+        if ((len(lexing) > i+2) and (lexing[i+2].type == "SCOL")):
             setNoDouble("string",lexing[i+1].value, stringUninitialized, variables, socket )
             #variables["string"].append([lexing[i+1].value, stringUninitialized])
         else : 
-            j = i+2
+            j=i+2
             while((len(lexing) > j ) and lexing[j].type == "COM"):
                 setNoDouble("string",lexing[j-1].value, stringUninitialized , variables, socket )
                 #variables["string"].append([lexing[j-1].value, stringUninitialized])
@@ -107,12 +107,14 @@ def setNoDouble(type, nomVar, value, variables, socket) :
             #si mauvaise valeur dans la liste
             if list[1] != value :
                 list[1] = value
+                socket.sendto(str(type).encode(), ("127.0.0.1", 1111))
                 socket.sendto(str(value).encode(), ("127.0.0.1", 1111))
             #si bonne valeur, on fait rien
             return
     #pas dans la liste
     else : 
         variables[type].append([nomVar, value])
+        socket.sendto(str(type).encode(), ("127.0.0.1", 1111))
         socket.sendto(str(value).encode(), ("127.0.0.1", 1111))
         
         
