@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QApplication,QWidget,QTextEdit, QVBoxLayout
-#from PyQt5.QtGui import QGuiApplication
+from PyQt5.QtGui import QColor
 import sys
 import socket
 
@@ -9,6 +9,7 @@ class TextEditDemo(QWidget):
                 super().__init__(parent)
 
                 self.setWindowTitle("QTextEdit")
+                self.setStyleSheet("color : white ;background: rgba(0,0,0,100%)")
                 self.resize(260,260)
                 self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
                 self.textEdit = QTextEdit()

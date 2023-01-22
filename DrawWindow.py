@@ -13,8 +13,10 @@ angle = 0
 angle_vieux = angle
 angle_lock = threading.Lock()
 
-turtle.setup(width=300, height=300, startx=None, starty=None)
-
+#Mise en place de la fenêtre Graphique
+turtle.setup(width=1.0, height=1.0)
+turtle.title("Live Coding Graphics")
+turtle.bgcolor("black")
 draw = turtle.Turtle()
 
 
@@ -39,10 +41,8 @@ def Listen():
             sys.exit()
 
 
-
+# create and start the new thread
 t1 = threading.Thread(target=Listen)
-
-# start the new thread
 t1.start()
 
 while True:
@@ -58,6 +58,5 @@ while True:
         angle_vieux = angle
     angle_lock.release()    
 
-#turtle.done()
 
     # Show the drawing
