@@ -49,55 +49,43 @@ def addInVariables(lexing, i, type, variables, socket):
         # int   a   =   3   ;
         if ((lexing[i+2].type == "ASSIGN") and (lexing[i+4].type == "SCOL")):
             setNoDouble("int", lexing[i+1].value, lexing[i+3].value, variables, socket)
-            #variables["int"].append([lexing[i+1].value, lexing[i+3].value])
         # int   a   ;
         if (lexing[i+2].type == "SCOL"):
             setNoDouble("int",lexing[i+1].value, intUninitialized, variables, socket )
-            #variables["int"].append([lexing[i+1].value, intUninitialized])
         # int   a   ,   b   ;
         else : 
             j = i+2
             while(lexing[j].type == "COM"):
                 setNoDouble("int",lexing[j-1].value, intUninitialized, variables, socket )
-                #variables["int"].append([lexing[j-1].value, intUninitialized])
                 j = j + 2
             if (lexing[j].type == "SCOL"):
                 setNoDouble("int",lexing[j-1].value, intUninitialized, variables, socket )
-                #variables["int"].append([lexing[j-1].value, intUninitialized])
 
-    if (type == 'string'):
-        if ((len(lexing) > i+5)  and (lexing[i+2].type == "ASSIGN") and (lexing[i+3].type == "QUOT") and (lexing[i+5].type == "QUOT")):
+    if ((len(lexing) > i+5) and (type == 'string')):
+        if ((lexing[i+2].type == "ASSIGN") and (lexing[i+3].type == "QUOT") and (lexing[i+5].type == "QUOT")):
             setNoDouble("string",lexing[i+1].value, lexing[i+4].value, variables, socket )
-            #variables["string"].append([lexing[i+1].value, lexing[i+4].value])
-        if ((len(lexing) > i+2) & (lexing[i+2].type == "SCOL")):
+        if (lexing[i+2].type == "SCOL"):
             setNoDouble("string",lexing[i+1].value, stringUninitialized, variables, socket )
-            #variables["string"].append([lexing[i+1].value, stringUninitialized])
         else : 
             j = i+2
             while((len(lexing) > j ) and lexing[j].type == "COM"):
                 setNoDouble("string",lexing[j-1].value, stringUninitialized , variables, socket )
-                #variables["string"].append([lexing[j-1].value, stringUninitialized])
                 j = j + 2
             if ((len(lexing) > j) and lexing[j].type == "SCOL"):
                 setNoDouble("string",lexing[j-1].value, stringUninitialized, variables, socket )
-                #variables["string"].append([lexing[j-1].value, stringUninitialized])
 
     if (type == 'bool'):
         if ((len(lexing) > i+4) and (lexing[i+2].type == "ASSIGN") and (lexing[i+4].type == "SCOL")):
             setNoDouble("bool",lexing[i+1].value, lexing[i+3].value, variables, socket)
-            #variables["bool"].append([lexing[i+1].value, lexing[i+3].value])
         if ((len(lexing) > i+2) and lexing[i+2].type == "SCOL"):
             setNoDouble("bool",lexing[i+1].value, boolUninitialized, variables, socket)
-            #variables["bool"].append([lexing[i+1].value, boolUninitialized])
         else : 
             j = i+2
             while((len(lexing) > j) and lexing[j].type == "COM"):
                 setNoDouble("bool",lexing[j-1].value, boolUninitialized, variables, socket)
-                #variables["bool"].append([lexing[j-1].value, boolUninitialized])
                 j = j + 2
             if ((len(lexing) > j) and lexing[j].type == "SCOL"):
                 setNoDouble("bool",lexing[j-1].value, boolUninitialized, variables, socket)
-                #variables["bool"].append([lexing[j-1].value, boolUninitialized])
 
 
 def setNoDouble(type, nomVar, value, variables, socket) :

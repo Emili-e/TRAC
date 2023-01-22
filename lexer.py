@@ -6,6 +6,7 @@ import Parser
 tokens = ( 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 
            'LPAREN', 'RPAREN', 'LBRACE', 'RBRACE',
            'COL', 'SCOL', 'COM', 'ASSIGN',
+           'QUOT',
            'NAME', 'NUMBER' )
 
 # Ignored characters
@@ -26,6 +27,8 @@ t_COL = r'\:'
 t_SCOL = r'\;'
 t_COM = r'\,'
 t_ASSIGN = r'\='
+
+t_QUOT = r'\"'
 
 t_NAME = r'[a-zA-Z_][a-zA-Z0-9._]*'
 
