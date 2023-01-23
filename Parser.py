@@ -155,7 +155,7 @@ def GetDrawingAngle(name):
 # Récupère la couleur
 # par défaut = black
 def GetDrawingColor(value, type):
-    if type != "string" : return "white"
+    return "white"
     index = 0
     while (value[index] in alphabet):
         index += 1
