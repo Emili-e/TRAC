@@ -31,7 +31,6 @@ variables = {'int' : [], 'string' : [], 'bool' : []}
 
 # Add variables in dict:variables
 def variableIdentifier(lexing, socket):
-    
     for i in range (len(lexing)):
         if ((lexing[i].type == "NAME") & (lexing[i].value in typekeywords)):
             if (lexing[i].value == "int"):
@@ -40,7 +39,6 @@ def variableIdentifier(lexing, socket):
                 addInVariables(lexing, i, "string", variables, socket)
             if (lexing[i].value == "bool"):
                 addInVariables(lexing, i, "bool", variables, socket)
-
     return variables
 
 

@@ -6,7 +6,7 @@ import socket
 class TextEditDemo(QWidget):
         def __init__(self,parent=None):
                 super().__init__(parent)
-
+                # Creation de la fenêtre de texte
                 self.setWindowTitle("QTextEdit")
                 self.setStyleSheet("color : white ; background: rgba(0,0,0,0%)")
                 self.resize(260,260)

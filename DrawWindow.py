@@ -4,7 +4,7 @@ import socket
 from math import cos, sin
 import threading
 
-# Create the turtle
+# Creation d'une socket
 sockDraw = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sockDraw.bind(("127.0.0.1", 1111))
 
@@ -12,6 +12,7 @@ sockDraw.bind(("127.0.0.1", 1111))
 turtle.setup(width=1.0, height=1.0)
 turtle.title("Live Coding Graphics")
 turtle.bgcolor("black")
+# Create the turtle
 draw = turtle.Turtle()
 
 
@@ -26,7 +27,7 @@ def Listen():
             """
             if typee[0] == "clear" :
                 turtle.clear()
-                """
+            """
             if typee[0] == "int" :
                 angle_lock.acquire()
                 angle = int(instr[0])
