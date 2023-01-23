@@ -22,7 +22,6 @@ test_int = 10
 while True:
     # Attend de recevoir tout ce qui a été écrit dans la fenêtre
     Text = sockText.recvfrom(100000)
-    #sockText.sendto(str("clear").encode(), ("127.0.0.1", 1111))
     # Appelle le lexer
     lexer.lexing(Text.__getitem__(0).decode(), sockText)
     """

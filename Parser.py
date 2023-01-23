@@ -108,7 +108,7 @@ def getDrawingInfo(name, type, value) :
     angle = GetDrawingAngle(name)
     x = GetDrawingX(name)
     y = GetDrawingY(name)
-    color = " "
+    color = GetDrawingColor(value, type)
     return f"{x};{y};{angle};{type};{color}"
 
 
@@ -154,13 +154,14 @@ def GetDrawingAngle(name):
 # et qui renvoie une string correspondant à la couleur
 # Récupère la couleur
 # par défaut = black
-def GetDrawingColor(value):
+def GetDrawingColor(value, type):
+    if type != "string" : return "white"
     index = 0
     while (value[index] in alphabet):
         index += 1
     color = value[0:index]
     if (color == ""):
-        color = "black"
+        color = "white"
     return color
 
 '''
