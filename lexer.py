@@ -73,7 +73,7 @@ def lexing(data, socket):
         lexing = lexing + [tok]
         if not tok: break # No more input
     lexing.pop()
-    #print(lexing)
+    # print(lexing)
     # retire le dernier élément None
     print(Parser.variableIdentifier(lexing, socket))
     return lexing

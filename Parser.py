@@ -48,55 +48,42 @@ def addInVariables(lexing, i, type, variables, socket):
         # int   a   =   3   ;
         if (len(lexing) > i+4 and (lexing[i+2].type == "ASSIGN") and (lexing[i+4].type == "SCOL")):
             setNoDouble("int", lexing[i+1].value, lexing[i+3].value, variables, socket)
-            #variables["int"].append([lexing[i+1].value, lexing[i+3].value])
         # int   a   ;
         if (len(lexing) > i+2 and lexing[i+2].type == "SCOL"):
             setNoDouble("int",lexing[i+1].value, intUninitialized, variables, socket )
-            #variables["int"].append([lexing[i+1].value, intUninitialized])
         # int   a   ,   b   ;
         elif len(lexing) > i+2 : 
             j = i+2
             while(lexing[j].type == "COM"):
                 setNoDouble("int",lexing[j-1].value, intUninitialized, variables, socket )
-                #variables["int"].append([lexing[j-1].value, intUninitialized])
                 j = j + 2
             if (lexing[j].type == "SCOL"):
                 setNoDouble("int",lexing[j-1].value, intUninitialized, variables, socket )
-                #variables["int"].append([lexing[j-1].value, intUninitialized])
-
+    # string sans " "
     if (type == 'string'):
         if ((len(lexing) > i+4)  and (lexing[i+2].type == "ASSIGN") and (lexing[i+4].type == "SCOL")): #and (lexing[i+3].type == "NAME") 
             setNoDouble("string",lexing[i+1].value, lexing[i+3].value, variables, socket )
-            #variables["string"].append([lexing[i+1].value, lexing[i+4].value])
         if ((len(lexing) > i+2) and (lexing[i+2].type == "SCOL")):
             setNoDouble("string",lexing[i+1].value, stringUninitialized, variables, socket )
-            #variables["string"].append([lexing[i+1].value, stringUninitialized])
         else : 
             j=i+2
             while((len(lexing) > j ) and lexing[j].type == "COM"):
                 setNoDouble("string",lexing[j-1].value, stringUninitialized , variables, socket )
-                #variables["string"].append([lexing[j-1].value, stringUninitialized])
                 j = j + 2
             if ((len(lexing) > j) and lexing[j].type == "SCOL"):
                 setNoDouble("string",lexing[j-1].value, stringUninitialized, variables, socket )
-                #variables["string"].append([lexing[j-1].value, stringUninitialized])
-
     if (type == 'bool'):
         if ((len(lexing) > i+4) and (lexing[i+2].type == "ASSIGN") and (lexing[i+4].type == "SCOL")):
             setNoDouble("bool",lexing[i+1].value, lexing[i+3].value, variables, socket)
-            #variables["bool"].append([lexing[i+1].value, lexing[i+3].value])
         if ((len(lexing) > i+2) and lexing[i+2].type == "SCOL"):
             setNoDouble("bool",lexing[i+1].value, boolUninitialized, variables, socket)
-            #variables["bool"].append([lexing[i+1].value, boolUninitialized])
         else : 
             j = i+2
             while((len(lexing) > j) and lexing[j].type == "COM"):
                 setNoDouble("bool",lexing[j-1].value, boolUninitialized, variables, socket)
-                #variables["bool"].append([lexing[j-1].value, boolUninitialized])
                 j = j + 2
             if ((len(lexing) > j) and lexing[j].type == "SCOL"):
                 setNoDouble("bool",lexing[j-1].value, boolUninitialized, variables, socket)
-                #variables["bool"].append([lexing[j-1].value, boolUninitialized])
 
 
 def setNoDouble(type, nomVar, value, variables, socket) :
@@ -115,19 +102,11 @@ def setNoDouble(type, nomVar, value, variables, socket) :
     socket.sendto(str(type).encode(), ("127.0.0.1", 1111))
     socket.sendto(str(value).encode(), ("127.0.0.1", 1111))
         
-        
 
-# get drawing direction parameter
-def GetDrawingDirection(name):
-    # 1e lettre = direction : 360/value(lettre)
-    if (name[0] == 'a'):
-        direction = 0
-    else:
-        direction = 360/alphabet[name[0]]
-    return direction
-
-
-# get drawing x positional parameter
+# Fonction qui prend en entrée le nom de la variable
+# et qui renvoie un entier donnant la coordonnée en x
+# Récupère la coordonnée x de la position initiale
+# par défaut = 0
 def GetDrawingX(name):
     if (name[-2] == 'a'):
         x = 0
@@ -136,15 +115,44 @@ def GetDrawingX(name):
     return x
 
 
-# get drawing ys positional parameter
+# Fonction qui prend en entrée le nom de la variable
+# et qui renvoie un entier donnant la coordonnée en y
+# Récupère la coordonnée y de la position initiale
+# par défaut = 0
 def GetDrawingY(name):
     if (name[-1] == 'a'):
         y = 0
     else:
         y = windowSize/alphabet[name[-1]] 
     return y
-    
 
+
+# Fonction qui prend en entrée le nom de la variable
+# et qui renvoie un entier correspondant à l'angle par rapport à l'horizontale
+# Récupère l'angle par rapport à l'horizontale
+def GetDrawingAnlge(name):
+    # 1e lettre = direction : 360/value(lettre)
+    if (name[0] == 'a'):
+        angle = 0
+    else:
+        angle = 360/alphabet[name[0]]
+    return angle
+
+
+# Fonction qui prend en entrée la valeur de la variable
+# et qui renvoie une string correspondant à la couleur
+# Récupère la couleur
+# par défaut = black
+def GetDrawingColor(value):
+    index = 0
+    while (value[index] in alphabet):
+        index += 1
+    color = value[0:index]
+    if (color == ""):
+        color = "black"
+    return color
+
+'''
 def IntDrawing(name, value):
     direction = GetDrawingDirection(name)
     x = GetDrawingX(name)
@@ -178,11 +186,11 @@ def BoolDrawing(name, value):
         f = FalseFrequency
         
     # draw zigzag
-
-"""      
+   
 def main():
     variableIdentifier(lexing)
     print(variables)
     #IntDrawing(variables["int"][0][0], variables["int"][0][1])
     #StringDrawing(variables["string"][3][0], variables["string"][3][1])
-main()"""
+main()
+'''
