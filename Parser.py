@@ -93,15 +93,26 @@ def setNoDouble(type, nomVar, value, variables, socket) :
             #si mauvaise valeur dans la liste
             if list[1] != value :
                 list[1] = value
-                socket.sendto(str(type).encode(), ("127.0.0.1", 1111))
-                socket.sendto(str(value).encode(), ("127.0.0.1", 1111))
+                infos = getDrawingInfo(nomVar, type, value)
+                socket.sendto(infos.encode(), ("127.0.0.1", 1111))
             #si bonne valeur, on fait rien
             return
     #pas dans la liste
     variables[type].append([nomVar, value])
-    socket.sendto(str(type).encode(), ("127.0.0.1", 1111))
-    socket.sendto(str(value).encode(), ("127.0.0.1", 1111))
+    infos = getDrawingInfo(nomVar, type, value)
+    socket.sendto(infos.encode(), ("127.0.0.1", 1111))
         
+
+
+def getDrawingInfo(name, type, value) :
+    angle = GetDrawingAngle(name)
+    x = GetDrawingX(name)
+    y = GetDrawingY(name)
+    color = " "
+    return f"{x};{y};{angle};{type};{color}"
+
+
+
 
 # Fonction qui prend en entrée le nom de la variable
 # et qui renvoie un entier donnant la coordonnée en x
@@ -111,7 +122,7 @@ def GetDrawingX(name):
     if (name[-2] == 'a'):
         x = 0
     else:
-        x = windowSize/alphabet[name[-2]]
+        x = 1200/alphabet[name[-2]]
     return x
 
 
@@ -123,14 +134,14 @@ def GetDrawingY(name):
     if (name[-1] == 'a'):
         y = 0
     else:
-        y = windowSize/alphabet[name[-1]] 
+        y = 500/alphabet[name[-1]] 
     return y
 
 
 # Fonction qui prend en entrée le nom de la variable
 # et qui renvoie un entier correspondant à l'angle par rapport à l'horizontale
 # Récupère l'angle par rapport à l'horizontale
-def GetDrawingAnlge(name):
+def GetDrawingAngle(name):
     # 1e lettre = direction : 360/value(lettre)
     if (name[0] == 'a'):
         angle = 0

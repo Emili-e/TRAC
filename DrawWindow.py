@@ -9,43 +9,33 @@ sockDraw = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sockDraw.bind(("127.0.0.1", 1111))
 
 # Mise en place de la fenêtre Graphique
-turtle.setup(width=1.0, height=1.0)
+turtle.setup(width=1200, height=600)
 turtle.title("Live Coding Graphics")
 turtle.bgcolor("black")
 # Create the turtle
 draw = turtle.Turtle()
 
+angle_lock = threading.Lock()
 
 def Listen():
     global angle
     global typeT
     while True:
         try:
-            typee = sockDraw.recvfrom(1024)
-            instr = sockDraw.recvfrom(1024)
-            typeT = typee
-            """
-            if typee[0] == "clear" :
-                turtle.clear()
-            """
-            if typee[0] == "int" :
-                angle_lock.acquire()
-                angle = int(instr[0])
-                angle_lock.release() 
-            elif typee[0] == "string" :
-                angle_lock.acquire()
-                angle = angle - 3
-                angle_lock.release() 
-            else :
-                angle_lock.acquire()
-                angle = angle - 5
-                angle_lock.release() 
+            infos = sockDraw.recvfrom(1024)
+            info = infos[0].decode().split(";") # x,y,angle,type,color
+
+            typeT = info[3]
+            angle_lock.acquire()
+            angle = float(info[2])
+            angle_lock.release() 
+
                
         except socket.error:
             print("socket error")
             sys.exit()
             
-angle_lock = threading.Lock()
+
 # create and start the new thread
 t1 = threading.Thread(target=Listen)
 t1.start()
@@ -75,23 +65,9 @@ while True:
     # Draw the line 
     angle_lock.acquire()
     if angle_vieux != angle:
-        
-        if typeT == "string" :
-            draw.goto(x+distance, y+distance)
-            x = x+distance
-            y = y+distance
-            
-        elif typeT == "bool" :
-            x = x+distance
-            y = y+distance
-            draw.goto(x+cos(45)*distance, y+sin(45)*distance)
-            x = x+cos(45)*distance
-            y = y+sin(45)*distance
-            
-        else : 
-            draw.goto(x+cos(angle)*distance, y+sin(angle)*distance)
-            x = x+cos(angle)*distance
-            y = y+sin(angle)*distance
+        draw.goto(x+cos(angle)*distance, y+sin(angle)*distance)
+        x = x+cos(angle)*distance
+        y = y+sin(angle)*distance
         angle_vieux = angle
     angle_lock.release()    
 
