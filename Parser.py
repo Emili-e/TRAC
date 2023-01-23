@@ -23,6 +23,7 @@ windowSize = 750
 TrueFrequency = 1 
 FalseFrequency = 0
 thickness = [k for k in range(5)]
+variables = {'int' : [], 'string' : [], 'bool' : []}
 
 
 
@@ -30,7 +31,7 @@ thickness = [k for k in range(5)]
 
 # Add variables in dict:variables
 def variableIdentifier(lexing, socket):
-    variables = {'int' : [], 'string' : [], 'bool' : []}
+    
     for i in range (len(lexing)):
         if ((lexing[i].type == "NAME") & (lexing[i].value in typekeywords)):
             if (lexing[i].value == "int"):
@@ -112,10 +113,9 @@ def setNoDouble(type, nomVar, value, variables, socket) :
             #si bonne valeur, on fait rien
             return
     #pas dans la liste
-    else : 
-        variables[type].append([nomVar, value])
-        socket.sendto(str(type).encode(), ("127.0.0.1", 1111))
-        socket.sendto(str(value).encode(), ("127.0.0.1", 1111))
+    variables[type].append([nomVar, value])
+    socket.sendto(str(type).encode(), ("127.0.0.1", 1111))
+    socket.sendto(str(value).encode(), ("127.0.0.1", 1111))
         
         
 

@@ -1,6 +1,5 @@
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QApplication,QWidget,QTextEdit, QVBoxLayout
-from PyQt5.QtGui import QColor
 import sys
 import socket
 

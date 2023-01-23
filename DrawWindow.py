@@ -17,15 +17,21 @@ draw = turtle.Turtle()
 
 def Listen():
     global angle
+    global typeT
     while True:
         try:
-            Ttype = sockDraw.recvfrom(1024)
+            typee = sockDraw.recvfrom(1024)
             instr = sockDraw.recvfrom(1024)
-            if Ttype[0] == "int" :
+            typeT = typee
+            """
+            if typee[0] == "clear" :
+                turtle.clear()
+                """
+            if typee[0] == "int" :
                 angle_lock.acquire()
                 angle = int(instr[0])
                 angle_lock.release() 
-            elif Ttype[0] == "string" :
+            elif typee[0] == "string" :
                 angle_lock.acquire()
                 angle = angle - 3
                 angle_lock.release() 
@@ -37,7 +43,7 @@ def Listen():
         except socket.error:
             print("socket error")
             sys.exit()
-
+            
 angle_lock = threading.Lock()
 # create and start the new thread
 t1 = threading.Thread(target=Listen)
@@ -47,13 +53,15 @@ t1.start()
 
 draw.hideturtle()
 draw.pencolor("red")
-draw.pensize(5)
-x = 300
-y = 300
+draw.pensize(8)
+x = 100
+y = 100
 distance = 30
 
 angle = 0
 angle_vieux = 0
+
+typeT = ""
 
 
 
@@ -66,9 +74,23 @@ while True:
     # Draw the line 
     angle_lock.acquire()
     if angle_vieux != angle:
-        draw.goto(x+cos(angle)*distance, y+sin(angle)*distance)
-        x = x+cos(angle)*distance
-        y = y+sin(angle)*distance
+        
+        if typeT == "string" :
+            draw.goto(x+distance, y+distance)
+            x = x+distance
+            y = y+distance
+            
+        elif typeT == "bool" :
+            x = x+distance
+            y = y+distance
+            draw.goto(x+cos(45)*distance, y+sin(45)*distance)
+            x = x+cos(45)*distance
+            y = y+sin(45)*distance
+            
+        else : 
+            draw.goto(x+cos(angle)*distance, y+sin(angle)*distance)
+            x = x+cos(angle)*distance
+            y = y+sin(angle)*distance
         angle_vieux = angle
     angle_lock.release()    
 
