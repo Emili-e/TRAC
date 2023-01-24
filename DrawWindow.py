@@ -54,6 +54,7 @@ t1 = threading.Thread(target=Listen)
 t1.start()
 
 
+# Dessine la sinusoide correspondant à un int
 def drawSinusoide() :
     draw.pensize(3)
     for x in range(floor(info["x"]), floor(info["x"]+300)) :
@@ -67,27 +68,28 @@ def drawSinusoide() :
         draw.goto(x2,y)
         
 
+# Dessine le trait correspondant à une string
+def drawLine():
+    draw.goto(info["x"], info["y"]) # go to (x,y)
+    draw.pendown()
+    draw.pensize(info["thick"]*1.5)
+    draw.speed(1)
+    draw.goto(info["x"]+cos(info["angle"]*(pi/180))*distance, info["y"]+sin(info["angle"]*(pi/180))*distance)
 
-
-
-
-
+# masque la tortue
 draw.hideturtle()
-
 distance = 30
 
-#Dictionnaire qui se remplit quand une nouvlle trame arrive
+# Dictionnaire qui se remplit quand une nouvlle trame arrive
 info = {"x":0.0 , "y":0.0, "angle":0.0, "type" : " ", "color" : " ", "value":1,  "thick" : 0.0} 
-#Boolean qui annonce l'arrivée de la trame
+# Boolean qui annonce l'arrivée de la trame
 new = 0
 
 while True:
-    
     # Go to (x,y), but can't draw when moving
     draw.penup()
+    draw.speed(0)
     draw.goto(info["x"], info["y"]) # go to (x,y)
-    draw.pendown()
-    
     
     # Draw the line 
     angle_lock.acquire()
@@ -97,21 +99,10 @@ while True:
         
         if info["type"] == "int" :
             drawSinusoide()
-        
         elif info["type"] == "string":
             draw.pensize(info["thick"]*1.5)
-            print(info)
-            draw.goto(info["x"]+cos(info["angle"])*distance, info["y"]+sin(info["angle"])*distance)
-            
-        else :
-            draw.goto(x+cos(info["angle"])*distance, y+sin(info["angle"])*distance)
-            x = x+cos(info["angle"])*distance
-            y = y+sin(info["angle"])*distance
+            drawLine()
+
         new = 0
     
     angle_lock.release()    
-
-
-    # Show the drawing
-
-
