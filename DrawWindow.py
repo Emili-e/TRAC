@@ -38,7 +38,8 @@ def Listen():
             info["type"] = infoString[3]
             info["color"] = infoString[4]
             info["thick"] = float(infoString[5])
-            if info["type"] == "int" :
+            if (info["type"] == "int" or info["type"] == "bool") :
+                print(infoString[6])
                 info["value"] = int(infoString[6])
             #On annonce la nouvelle trame
             new = 1;
@@ -75,9 +76,9 @@ def drawLine():
     draw.speed(1)
     draw.goto(info["x"]+cos(info["angle"]*(pi/180))*distance, info["y"]+sin(info["angle"]*(pi/180))*distance)
 
-def drawZigZag():
-    print("dessin")
-    print(info)
+
+# Dessine un zigzag de gauche à droite /\/
+def drawZigZagTrue():
     x1, y1 = info["x"], info["y"]
     dx, dy = distance*cos(info["angle"]*(pi/180)), distance*sin(info["angle"]*(pi/180))
     x2, y2 = info["x"] + dx, info["y"] + dy
@@ -91,6 +92,26 @@ def drawZigZag():
         draw.goto(x2, y2)
 
         x1, x2 = x1 + 2*dx, x2 + 2*dx
+
+        draw.goto(x1, y1)
+        draw.goto(x2, y2)
+
+
+# Dessine un zigzag de droite à gauche /\/
+def drawZigZagFalse():
+    x1, y1 = info["y"], info["x"]
+    dx, dy = distance*sin(info["angle"]*(pi/180)), distance*cos(info["angle"]*(pi/180))
+    x2, y2 = info["y"] + dy, info["x"] + dx
+
+    for i in range(1, 10):
+        draw.goto(x1, y1)
+        draw.pendown()
+        draw.pensize(info["thick"]*1.5)
+        draw.speed(1)
+
+        draw.goto(x2, y2)
+
+        y1, y2 = y1 + 2*dy, y2 + 2*dy
 
         draw.goto(x1, y1)
         draw.goto(x2, y2)
@@ -123,8 +144,10 @@ while True:
             draw.pensize(info["thick"]*1.5)
             drawLine()
         elif info["type"] == "bool" :
-            print("ici")
-            drawZigZag()
+            if (info["value"] == 1):
+                drawZigZagTrue()
+            else :
+                drawZigZagFalse()
 
         new = 0
     
