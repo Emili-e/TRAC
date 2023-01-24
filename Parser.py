@@ -89,14 +89,14 @@ def addInVariables(lexing, i, type, variables, socket):
 
 def setNoDouble(type, nomVar, value, variables, socket) :
     for list in variables[type] :
-        #si déjà dans la liste
+        # si déjà dans la liste
         if list[0] == nomVar :
-            #si mauvaise valeur dans la liste
+            # si mauvaise valeur dans la liste
             if list[1] != value :
                 list[1] = value
                 infos = getDrawingInfo(nomVar, type, value)
                 socket.sendto(infos.encode(), ("127.0.0.1", 1111))
-            #si bonne valeur, on fait rien
+            # si bonne valeur, on fait rien
             return
     #pas dans la liste
     variables[type].append([nomVar, value])
@@ -104,11 +104,13 @@ def setNoDouble(type, nomVar, value, variables, socket) :
     socket.sendto(infos.encode(), ("127.0.0.1", 1111))
         
 
-
+# Fonction qui prend en entrée le nom de la variable, son type et sa valeur
+# et qui renvoie un dictionnaire contenant x, y, angle, type, couleur
+# Récupère les informations nécessaires au tracé
 def getDrawingInfo(name, type, value) :
-    angle = GetDrawingAngle(name)
     x = GetDrawingX(name)
     y = GetDrawingY(name)
+    angle = GetDrawingAngle(name)
     color = GetDrawingColor(value, type)
     thick = GetDrawingThickness(value, type)
     return f"{x};{y};{angle};{type};{color};{thick};{value}"
@@ -183,7 +185,6 @@ def IntDrawing(name, value):
     # if (value == -1):
 
     # draw sinusoïde
-
     
 def BoolDrawing(name, value):
     direction = GetDrawingDirection(name)

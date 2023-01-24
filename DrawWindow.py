@@ -4,18 +4,18 @@ import socket
 from math import *
 import threading
 
-# Creation d'une socket
+# Création d'une socket
 sockDraw = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sockDraw.bind(("127.0.0.1", 1111))
 
-# Mise en place de la fenêtre Graphique
+# Mise en place de la fenêtre graphique
 turtle.setup(width=1200, height=600)
 turtle.setworldcoordinates(0, 0, 1200, 600)
 turtle.title("Live Coding Graphics")
 turtle.bgcolor("black")
 # Create the turtle
 draw = turtle.Turtle()
-
+# "mutex"
 angle_lock = threading.Lock()
 
 def Listen():
@@ -25,12 +25,13 @@ def Listen():
     global info
     while True:
         try:
+            # On attend de recevoir quelque chose
             infos = sockDraw.recvfrom(1024)
             #on rempli un tableau des informations importantes
             infoString = infos[0].decode().split(";") # x,y,angle,type,color,thick,value
             
             angle_lock.acquire()
-            #On remplit le dictionnaire
+            # On remplit le dictionnaire
             info["x"] = float(infoString[0])
             info["y"] = float(infoString[1])
             info["angle"] = float(infoString[2])
@@ -84,7 +85,7 @@ while True:
     
     # Go to (x,y), but can't draw when moving
     draw.penup()
-    draw.goto(info["x"], info["y"]) #go to (x,y)
+    draw.goto(info["x"], info["y"]) # go to (x,y)
     draw.pendown()
     
     
