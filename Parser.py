@@ -109,7 +109,7 @@ def getDrawingInfo(name, type, value) :
     x = GetDrawingX(name)
     y = GetDrawingY(name)
     color = GetDrawingColor(value, type)
-    return f"{x};{y};{angle};{type};{color}"
+    return f"{x};{y};{angle};{type};{color};{value}"
 
 
 
