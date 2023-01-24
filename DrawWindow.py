@@ -9,7 +9,7 @@ sockDraw = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sockDraw.bind(("127.0.0.1", 1111))
 
 # Mise en place de la fenêtre Graphique
-turtle.setup(width=1200, height=600, startx=-1200, starty=-1)
+turtle.setup(width=1200, height=600)
 turtle.setworldcoordinates(0, 0, 1200, 600)
 turtle.title("Live Coding Graphics")
 turtle.bgcolor("black")
@@ -27,7 +27,7 @@ def Listen():
         try:
             infos = sockDraw.recvfrom(1024)
             #on rempli un tableau des informations importantes
-            infoString = infos[0].decode().split(";") # x,y,angle,type,color,value
+            infoString = infos[0].decode().split(";") # x,y,angle,type,color,thick,value
             
             angle_lock.acquire()
             #On remplit le dictionnaire
@@ -36,8 +36,9 @@ def Listen():
             info["angle"] = float(infoString[2])
             info["type"] = infoString[3]
             info["color"] = infoString[4]
+            info["thick"] = float(infoString[5])
             if info["type"] == "int" :
-                info["value"] = int(infoString[5])
+                info["value"] = int(infoString[6])
             #On annonce la nouvelle trame
             new = 1;
             angle_lock.release() 
@@ -54,10 +55,15 @@ t1.start()
 
 def drawSinusoide() :
     draw.pensize(3)
-    for x in range(floor(info["x"]), floor(info["x"]+500)) :
-        y = sin(radians(x)*pi*1/info["value"])*info["angle"] + info["y"]
-        y *= 5
-        draw.goto(x,y)
+    for x in range(floor(info["x"]), floor(info["x"]+300)) :
+        if x == floor(info["x"]) :
+            draw.penup()
+            draw.goto(x + cos(info["angle"])*distance, sin(radians(x)*2*pi*(1/info["value"]))*distance + info["y"])
+            draw.pendown()
+            
+        y = sin(radians(x)*2*pi*(1/info["value"]))*distance + info["y"]
+        x2 = x + cos(info["angle"])*distance 
+        draw.goto(x2,y)
         
 
 
@@ -66,14 +72,11 @@ def drawSinusoide() :
 
 
 draw.hideturtle()
-draw.pencolor("red")
-draw.pensize(8)
-x = 100
-y = 100
+
 distance = 30
 
 #Dictionnaire qui se remplit quand une nouvlle trame arrive
-info = {"x":0.0 , "y":0.0, "angle":0.0, "type" : " ", "color" : " ", "value":1} 
+info = {"x":0.0 , "y":0.0, "angle":0.0, "type" : " ", "color" : " ", "value":1,  "thick" : 0.0} 
 #Boolean qui annonce l'arrivée de la trame
 new = 0
 
@@ -89,8 +92,16 @@ while True:
     angle_lock.acquire()
     
     if new == 1 :
+        draw.pencolor(info["color"])
+        
         if info["type"] == "int" :
             drawSinusoide()
+        
+        elif info["type"] == "string":
+            draw.pensize(info["thick"]*1.5)
+            print(info)
+            draw.goto(info["x"]+cos(info["angle"])*distance, info["y"]+sin(info["angle"])*distance)
+            
         else :
             draw.goto(x+cos(info["angle"])*distance, y+sin(info["angle"])*distance)
             x = x+cos(info["angle"])*distance

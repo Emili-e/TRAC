@@ -18,11 +18,12 @@ boolUninitialized = False
 
 alphabet = {'a' : 0, 'b' : 1, 'c' : 2, 'd' : 3, 'e' : 4, 'f' : 5, 'g' : 6, 'h' : 7, 'i' : 8, 'j' : 9,
             'k' : 10, 'l' : 11, 'm' : 12, 'n' : 13, 'o' : 14, 'p' : 15, 'q' : 16, 'r' : 17, 's' : 18,
-            't' : 19, 'u' : 20, 'v' : 21, 'w' : 22, 'x' : 23, 'y' : 24, 'z' : 25}
-windowSize = 750
+            't' : 19, 'u' : 20, 'v' : 21, 'w' : 22, 'x' : 23, 'y' : 24, 'z' : 25, 
+            'A' : 0, 'B' : 1, 'C' : 2, 'D' : 3, 'E' : 4, 'F' : 5, 'G' : 6, 'H' : 7, 'I' : 8, 'J' : 9,
+            'K' : 10, 'L' : 11, 'M' : 12, 'N' : 13, 'O' : 14, 'P' : 15, 'Q' : 16, 'R' : 17, 'S' : 18,
+            'T' : 19, 'U' : 20, 'V' : 21, 'W' : 22, 'X' : 23, 'Y' : 24, 'Z' : 25}
 TrueFrequency = 1 
 FalseFrequency = 0
-thickness = [k for k in range(5)]
 variables = {'int' : [], 'string' : [], 'bool' : []}
 
 
@@ -109,7 +110,8 @@ def getDrawingInfo(name, type, value) :
     x = GetDrawingX(name)
     y = GetDrawingY(name)
     color = GetDrawingColor(value, type)
-    return f"{x};{y};{angle};{type};{color};{value}"
+    thick = GetDrawingThickness(value, type)
+    return f"{x};{y};{angle};{type};{color};{thick};{value}"
 
 
 
@@ -119,10 +121,10 @@ def getDrawingInfo(name, type, value) :
 # Récupère la coordonnée x de la position initiale
 # par défaut = 0
 def GetDrawingX(name):
-    if (name[-2] == 'a'):
+    if (name[-2] == 'a' or name[-2] == 'A'):
         x = 0
     else:
-        x = 1200/alphabet[name[-2]]
+        x = (1200/25)*alphabet[name[-2]]
     return x
 
 
@@ -131,10 +133,10 @@ def GetDrawingX(name):
 # Récupère la coordonnée y de la position initiale
 # par défaut = 0
 def GetDrawingY(name):
-    if (name[-1] == 'a'):
+    if (name[-1] == 'a' or name[-1] == 'A'):
         y = 0
     else:
-        y = 500/alphabet[name[-1]] 
+        y = (600/25)*alphabet[name[-1]]
     return y
 
 
@@ -143,7 +145,7 @@ def GetDrawingY(name):
 # Récupère l'angle par rapport à l'horizontale
 def GetDrawingAngle(name):
     # 1e lettre = direction : 360/value(lettre)
-    if (name[0] == 'a'):
+    if (name[0] == 'a' or name[0] == 'A'):
         angle = 0
     else:
         angle = 360/alphabet[name[0]]
@@ -151,18 +153,27 @@ def GetDrawingAngle(name):
 
 
 # Fonction qui prend en entrée la valeur de la variable
-# et qui renvoie une string correspondant à la couleur
+# et qui renvoie une string correspondant à la couleur  et le type de la variable
 # Récupère la couleur
 # par défaut = black
 def GetDrawingColor(value, type):
-    return "white"
-    index = 0
-    while (value[index] in alphabet):
-        index += 1
-    color = value[0:index]
-    if (color == ""):
-        color = "white"
+    color = "white"
+    if (type == "string"):
+        index = 0
+        while (value[index] in alphabet):
+            index += 1
+            color = value[0:index]
     return color
+
+# Fonction qui prend en entrée la valeur de la variable et le type de la variable
+# et qui renvoie un entier correspondant à l'épaisseur
+# Récupère l'épaisseur (0 à 9)
+# par défaut = 1
+def GetDrawingThickness(value, type):
+    thick = 1
+    if (type == "string"):
+        thick = int(value[-1])
+    return thick
 
 '''
 def IntDrawing(name, value):
@@ -173,19 +184,6 @@ def IntDrawing(name, value):
 
     # draw sinusoïde
 
-def StringDrawing(name, value):
-    direction = GetDrawingDirection(name)
-    x = GetDrawingX(name)
-    y = GetDrawingY(name)
-
-    # mot = couleur
-    # chiffre = épaisseur
-    if (int(value[-1]) in thickness):
-        number = int(value[-1])
-        color = value[0:-1]
-        print(color, number)
-    
-    # draw
     
 def BoolDrawing(name, value):
     direction = GetDrawingDirection(name)
