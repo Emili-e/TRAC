@@ -56,7 +56,7 @@ t1.start()
 
 # Dessine la sinusoide correspondant à un int
 def drawSinusoide() :
-    draw.pensize(3)
+    # draw.pensize(3)
     for x in range(floor(info["x"]), floor(info["x"]+300)) :
         if x == floor(info["x"]) :
             draw.penup()
@@ -72,9 +72,28 @@ def drawSinusoide() :
 def drawLine():
     draw.goto(info["x"], info["y"]) # go to (x,y)
     draw.pendown()
-    draw.pensize(info["thick"]*1.5)
     draw.speed(1)
     draw.goto(info["x"]+cos(info["angle"]*(pi/180))*distance, info["y"]+sin(info["angle"]*(pi/180))*distance)
+
+def drawZigZag():
+    print("dessin")
+    print(info)
+    x1, y1 = info["x"], info["y"]
+    dx, dy = distance*cos(info["angle"]*(pi/180)), distance*sin(info["angle"]*(pi/180))
+    x2, y2 = info["x"] + dx, info["y"] + dy
+
+    for i in range(1, 10):
+        draw.goto(x1, y1)
+        draw.pendown()
+        draw.pensize(info["thick"]*1.5)
+        draw.speed(1)
+
+        draw.goto(x2, y2)
+
+        x1, x2 = x1 + 2*dx, x2 + 2*dx
+
+        draw.goto(x1, y1)
+        draw.goto(x2, y2)
 
 # masque la tortue
 draw.hideturtle()
@@ -96,12 +115,16 @@ while True:
     
     if new == 1 :
         draw.pencolor(info["color"])
+        draw.pensize(info["thick"]*1.5)
         
         if info["type"] == "int" :
             drawSinusoide()
         elif info["type"] == "string":
             draw.pensize(info["thick"]*1.5)
             drawLine()
+        elif info["type"] == "bool" :
+            print("ici")
+            drawZigZag()
 
         new = 0
     

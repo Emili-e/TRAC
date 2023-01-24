@@ -116,17 +116,12 @@ def getDrawingInfo(name, type, value) :
     return f"{x};{y};{angle};{type};{color};{thick};{value}"
 
 
-
-
 # Fonction qui prend en entrée le nom de la variable
 # et qui renvoie un entier donnant la coordonnée en x
 # Récupère la coordonnée x de la position initiale
 # par défaut = 0
 def GetDrawingX(name):
-    if (name[-2] == 'a' or name[-2] == 'A'):
-        x = 0
-    else:
-        x = (1200/25)*alphabet[name[-2]]
+    x = (1200/25)*alphabet[name[-2]]
     return x
 
 
@@ -135,10 +130,7 @@ def GetDrawingX(name):
 # Récupère la coordonnée y de la position initiale
 # par défaut = 0
 def GetDrawingY(name):
-    if (name[-1] == 'a' or name[-1] == 'A'):
-        y = 0
-    else:
-        y = (600/25)*alphabet[name[-1]]
+    y = (600/25)*alphabet[name[-1]]
     return y
 
 
@@ -146,11 +138,7 @@ def GetDrawingY(name):
 # et qui renvoie un entier correspondant à l'angle par rapport à l'horizontale
 # Récupère l'angle par rapport à l'horizontale
 def GetDrawingAngle(name):
-    # 1e lettre = direction : 360/value(lettre)
-    if (name[0] == 'a' or name[0] == 'A'):
-        angle = 0
-    else:
-        angle = 360/alphabet[name[0]]
+    angle = (360/25)*alphabet[name[0]]
     return angle
 
 
@@ -172,7 +160,7 @@ def GetDrawingColor(value, type):
 # Récupère l'épaisseur (0 à 9)
 # par défaut = 1
 def GetDrawingThickness(value, type):
-    thick = 1
+    thick = 3
     if (type == "string"):
         thick = int(value[-1])
     return thick
