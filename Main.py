@@ -4,7 +4,6 @@ import time
 import lexer
 
 
-
 # Lancement d'un programme externe avec Popen()
 processText = subprocess.Popen(["python","TextEdit.py"])
 processDraw = subprocess.Popen(["python","DrawWindow.py"])
@@ -24,8 +23,5 @@ while True:
     Text = sockText.recvfrom(100000)
     # Appelle le lexer
     lexer.lexing(Text.__getitem__(0).decode(), sockText)
-    """
-    test_int = test_int + 1
-    test_char = str(test_int)
-    """
-    
+
+

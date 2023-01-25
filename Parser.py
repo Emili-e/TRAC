@@ -1,14 +1,3 @@
-#import lexer
-
-# Import data
-"""
-f = open("code#.cs", "r")
-data = f.read()
-"""
-# Build lexer
-#lexing = lexer.lexing(data)
-# print(lexing)
-
 
 # Variables
 typekeywords = {'int','string', 'bool'}
