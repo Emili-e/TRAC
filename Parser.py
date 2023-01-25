@@ -10,27 +10,28 @@ data = f.read()
 # print(lexing)
 
 
-# Variables
-typekeywords = {'int','string', 'bool'}
-intUninitialized = -1
-stringUninitialized = ""
-boolUninitialized = False
+# Variables ------------------------------------------------------------------------- #
 
+typekeywords = {'int','string', 'bool'}
+variables = {'int' : [], 'string' : [], 'bool' : []}
 alphabet = {'a' : 0, 'b' : 1, 'c' : 2, 'd' : 3, 'e' : 4, 'f' : 5, 'g' : 6, 'h' : 7, 'i' : 8, 'j' : 9,
             'k' : 10, 'l' : 11, 'm' : 12, 'n' : 13, 'o' : 14, 'p' : 15, 'q' : 16, 'r' : 17, 's' : 18,
             't' : 19, 'u' : 20, 'v' : 21, 'w' : 22, 'x' : 23, 'y' : 24, 'z' : 25, 
             'A' : 0, 'B' : 1, 'C' : 2, 'D' : 3, 'E' : 4, 'F' : 5, 'G' : 6, 'H' : 7, 'I' : 8, 'J' : 9,
             'K' : 10, 'L' : 11, 'M' : 12, 'N' : 13, 'O' : 14, 'P' : 15, 'Q' : 16, 'R' : 17, 'S' : 18,
             'T' : 19, 'U' : 20, 'V' : 21, 'W' : 22, 'X' : 23, 'Y' : 24, 'Z' : 25}
-TrueFrequency = 1 
-FalseFrequency = 0
-variables = {'int' : [], 'string' : [], 'bool' : []}
+
+# Valeurs par défaut des variables
+intUninitialized = -1
+stringUninitialized = ""
+boolUninitialized = False
 
 
+# Fonctions ------------------------------------------------------------------------- #
 
-# Function
-
-# Add variables in dict:variables
+# Fonction qui prend en entrée le résultat du lexing et une socket
+# et qui renvoie le dict:variables
+# Identifie la déclaration de variables
 def variableIdentifier(lexing, socket):
     for i in range (len(lexing)):
         if ((lexing[i].type == "NAME") & (lexing[i].value in typekeywords)):
@@ -43,7 +44,9 @@ def variableIdentifier(lexing, socket):
     return variables
 
 
-# Add variables in dict:variables following the type
+# Fonction qui prend en entrée le résultat du lexing, la position, le type de la variable,
+# le dict:variables et une socket
+# Ajoute les variables au dict:variables selon les types
 def addInVariables(lexing, i, type, variables, socket):
     if (type == 'int'):
         # int   a   =   3   ;
@@ -87,6 +90,9 @@ def addInVariables(lexing, i, type, variables, socket):
                 setNoDouble("bool",lexing[j-1].value, boolUninitialized, variables, socket)
 
 
+# Fonction qui prend en entrée le type, le nom, la valeur de la variable,
+# le dict:variables et une socket
+# Ajoute les variables au dict:variables sans doublons
 def setNoDouble(type, nomVar, value, variables, socket) :
     for list in variables[type] :
         # si déjà dans la liste
@@ -98,7 +104,7 @@ def setNoDouble(type, nomVar, value, variables, socket) :
                 socket.sendto(infos.encode(), ("127.0.0.1", 1111))
             # si bonne valeur, on fait rien
             return
-    #pas dans la liste
+    # pas dans la liste
     variables[type].append([nomVar, value])
     value = convertBoolInt(type, value)
     infos = getDrawingInfo(nomVar, type, value)
@@ -139,7 +145,7 @@ def GetDrawingY(name):
 # et qui renvoie un entier correspondant à l'angle par rapport à l'horizontale
 # Récupère l'angle par rapport à l'horizontale
 def GetDrawingAngle(name):
-    angle = (360/25)*alphabet[name[0]]
+    angle = 15*alphabet[name[0]]
     return angle
 
 
