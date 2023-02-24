@@ -8,6 +8,9 @@ class TextEditDemo(QWidget):
                 super().__init__(parent)
                 # Creation de la fenêtre de texte
                 self.setWindowTitle("QTextEdit")
+                font = self.font()
+                font.setPointSize(12)
+                self.setFont(font)
                 self.setStyleSheet("color : white ; background: rgba(0,0,0,0%)")
                 self.resize(260,260)
                 self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

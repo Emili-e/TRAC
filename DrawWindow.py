@@ -9,8 +9,8 @@ sockDraw = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sockDraw.bind(("127.0.0.1", 1111))
 
 # Mise en place de la fenêtre graphique
-turtle.setup(width=1200, height=600)
-turtle.setworldcoordinates(0, 0, 1200, 600)
+turtle.setup(width=1000, height=650)
+turtle.setworldcoordinates(0, 0, 1000, 650)
 turtle.title("Live Coding Graphics")
 turtle.bgcolor("black")
 # Create the turtle
@@ -40,6 +40,7 @@ def Listen():
             info["thick"] = float(infoString[5])
             if (info["type"] == "int" or info["type"] == "bool") :
                 info["value"] = int(infoString[6])
+                
             #On annonce la nouvelle trame
             new = 1;
             angle_lock.release() 
@@ -62,7 +63,7 @@ def drawSinusoide() :
     for x in range(floor(info["x"]), floor(info["x"]+300)) :
         if x == floor(info["x"]) :
             draw.penup()
-            draw.goto(x + cos(info["angle"])*distance, sin(radians(x)*2*pi*(1/info["value"]))*distance + info["y"])
+            draw.goto(x + cos(info["angle"])*distance, sin(radians(x)*2*pi*(1/(info["value"]+1)))*distance + info["y"])
             draw.pendown()
             
         y = sin(radians(x)*2*pi*(1/info["value"]))*distance + info["y"]
@@ -72,7 +73,7 @@ def drawSinusoide() :
 
 # Dessine le trait correspondant à une string
 def drawLine():
-    distance = 60
+    distance = 300
     draw.goto(info["x"], info["y"]) # go to (x,y)
     draw.pendown()
     draw.speed(5)

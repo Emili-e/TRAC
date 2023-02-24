@@ -97,6 +97,7 @@ def setNoDouble(type, nomVar, value, variables, socket) :
     # pas dans la liste
     variables[type].append([nomVar, value])
     value = convertBoolInt(type, value)
+    print(value)
     infos = getDrawingInfo(nomVar, type, value)
     socket.sendto(infos.encode(), ("127.0.0.1", 1111))
         
@@ -168,7 +169,7 @@ def GetDrawingThickness(value, type):
 # Convertir False en 0 et True en 1
 def convertBoolInt(type, value):
     if (type == "bool"):
-        if (value == False):
+        if (value == "False"):
             value = 0
         else:
             value = 1
