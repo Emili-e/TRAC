@@ -90,6 +90,7 @@ def setNoDouble(type, nomVar, value, variables, socket) :
             if list[1] != value :
                 list[1] = value
                 value = convertBoolInt(type, value)
+                infos = getDrawingInfo(nomVar, type, value)
                 socket.sendto(infos.encode(), ("127.0.0.1", 1111))
             # si bonne valeur, on fait rien
             return

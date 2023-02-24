@@ -39,7 +39,6 @@ def Listen():
             info["color"] = infoString[4]
             info["thick"] = float(infoString[5])
             if (info["type"] == "int" or info["type"] == "bool") :
-                print(infoString[6])
                 info["value"] = int(infoString[6])
             #On annonce la nouvelle trame
             new = 1;
@@ -58,6 +57,8 @@ t1.start()
 # Dessine la sinusoide correspondant à un int
 def drawSinusoide() :
     # draw.pensize(3)
+    draw.pencolor("LimeGreen")
+    draw.pendown()
     for x in range(floor(info["x"]), floor(info["x"]+300)) :
         if x == floor(info["x"]) :
             draw.penup()
@@ -71,34 +72,40 @@ def drawSinusoide() :
 
 # Dessine le trait correspondant à une string
 def drawLine():
+    distance = 60
     draw.goto(info["x"], info["y"]) # go to (x,y)
     draw.pendown()
-    draw.speed(1)
+    draw.speed(5)
+    draw.pencolor(info["color"])
     draw.goto(info["x"]+cos(info["angle"]*(pi/180))*distance, info["y"]+sin(info["angle"]*(pi/180))*distance)
 
 
 # Dessine un zigzag de gauche à droite /\/
 def drawZigZagTrue():
+    draw.pencolor("DarkOrchid")
     x1, y1 = info["x"], info["y"]
-    dx, dy = distance*cos(info["angle"]*(pi/180)), distance*sin(info["angle"]*(pi/180))
+    dx, dy = cos(info["angle"]*(pi/180))*distance, sin(info["angle"]*(pi/180))*distance
     x2, y2 = info["x"] + dx, info["y"] + dy
+    draw.speed(5)
 
     for i in range(1, 10):
+        
         draw.goto(x1, y1)
         draw.pendown()
         draw.pensize(info["thick"]*1.5)
-        draw.speed(1)
+        
 
         draw.goto(x2, y2)
 
         x1, x2 = x1 + 2*dx, x2 + 2*dx
 
-        draw.goto(x1, y1)
-        draw.goto(x2, y2)
+        #draw.goto(x1, y1)
+        #draw.goto(x2, y2)
 
 
 # Dessine un zigzag de droite à gauche /\/
 def drawZigZagFalse():
+    draw.pencolor("DarkOrchid")
     x1, y1 = info["y"], info["x"]
     dx, dy = distance*sin(info["angle"]*(pi/180)), distance*cos(info["angle"]*(pi/180))
     x2, y2 = info["y"] + dy, info["x"] + dx
@@ -118,6 +125,7 @@ def drawZigZagFalse():
 
 # masque la tortue
 draw.hideturtle()
+draw.speed(8)
 distance = 30
 
 # Dictionnaire qui se remplit quand une nouvlle trame arrive
@@ -135,14 +143,18 @@ while True:
     angle_lock.acquire()
     
     if new == 1 :
-        draw.pencolor(info["color"])
+        if info["color"] != "reset" :
+            draw.pencolor(info["color"])
         draw.pensize(info["thick"]*1.5)
-        
+       
         if info["type"] == "int" :
             drawSinusoide()
         elif info["type"] == "string":
-            draw.pensize(info["thick"]*1.5)
-            drawLine()
+            if info["color"] == "reset" :
+                draw.clear()
+            else : 
+                draw.pensize(info["thick"]*1.5)
+                drawLine()
         elif info["type"] == "bool" :
             if (info["value"] == 1):
                 drawZigZagTrue()

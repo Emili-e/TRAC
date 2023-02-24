@@ -23,5 +23,3 @@ while True:
     Text = sockText.recvfrom(100000)
     # Appelle le lexer
     lexer.lexing(Text.__getitem__(0).decode(), sockText)
-
-
