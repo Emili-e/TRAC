@@ -115,7 +115,7 @@ def drawZigZagFalse():
         draw.goto(x1, y1)
         draw.pendown()
         draw.pensize(info["thick"]*1.5)
-        draw.speed(1)
+        #draw.speed(1)
 
         draw.goto(x2, y2)
 

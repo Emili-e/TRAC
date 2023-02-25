@@ -100,6 +100,8 @@ def setNoDouble(type, nomVar, value, variables, socket) :
     print(value)
     infos = getDrawingInfo(nomVar, type, value)
     socket.sendto(infos.encode(), ("127.0.0.1", 1111))
+    infoSong = getSongInfo(type)
+    socket.sendto(infoSong.encode(), ("127.0.0.1", 1112))
         
 
 # Fonction qui prend en entrée le nom de la variable, son type et sa valeur
@@ -169,11 +171,29 @@ def GetDrawingThickness(value, type):
 # Convertir False en 0 et True en 1
 def convertBoolInt(type, value):
     if (type == "bool"):
-        if (value == "False"):
+        if (value == "False" or value == "false"):
             value = 0
-        else:
+        elif (value == "True" or value == "true"):
             value = 1
     return value
+
+#------------------------------------------------
+# Partie son : fonctionne sur le meme principe que le dessin 
+
+# Fonction qui retourne True quand on a un ';' dans l'expression
+def HaveScol(lexing):
+    if lexing[len(lexing)] == "SCOL":
+        return True
+    return False
+
+
+# Fonction qui formate les informations à envoyer au son
+def getSongInfo(type):
+    scol = HaveScol
+    return f"{type};{scol}"   
+
+
+
 
 '''
 def IntDrawing(name, value):

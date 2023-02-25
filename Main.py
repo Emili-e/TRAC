@@ -7,6 +7,7 @@ import lexer
 # Lancement d'un programme externe avec Popen()
 processText = subprocess.Popen(["python","TextEdit.py"])
 processDraw = subprocess.Popen(["python","DrawWindow.py"])
+processSong = subprocess.Popen(["python", "PlaySong.py"])
 
 # parser = Parser
 # Création d'un socket UDP

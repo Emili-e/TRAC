@@ -9,7 +9,7 @@ class TextEditDemo(QWidget):
                 # Creation de la fenêtre de texte
                 self.setWindowTitle("QTextEdit")
                 font = self.font()
-                font.setPointSize(12)
+                font.setPointSize(14)
                 self.setFont(font)
                 self.setStyleSheet("color : white ; background: rgba(0,0,0,0%)")
                 self.resize(260,260)
